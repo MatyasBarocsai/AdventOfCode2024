@@ -16,7 +16,7 @@ fn all_combinations(n: usize, ops: &Vec<i64>) -> Vec<Vec<i64>> {
 }
 
 
-fn calcalute(equation: &(i64, Vec<i64>), operators: &Vec<i64>) -> i64 {
+fn calcalute(equation: &(i64, Vec<i64>), operators: &Vec<i64>, target: i64) -> i64 {
 
     let mut result: i64 = equation.1[0];
    
@@ -24,8 +24,11 @@ fn calcalute(equation: &(i64, Vec<i64>), operators: &Vec<i64>) -> i64 {
     //     1 == +
     //     2 == ||
 
-
     for i in 1..equation.1.len() {
+
+        //Early exit, if result above target
+        if result > target {return -1;}
+
         if operators[i-1] == 0 { result *= equation.1[i]; }
         else if operators[i-1] == 1 { result += equation.1[i]; }
         else if operators[i-1] == 2 { result = format!("{}{}", result, equation.1[i]).parse().expect("Could not concat"); }
@@ -73,7 +76,7 @@ pub fn solution(input: &str){
 
         for c in combinations {
            
-            let result = calcalute(e, &c);
+            let result = calcalute(e, &c, e.0);
 
             if result == e.0 {
                 part_1 += result;
